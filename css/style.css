@@ -48,6 +48,32 @@ span.jquery{
 	font-weight: bold;
 }
 
+span.spring{
+
+	color: #A62900;
+}
+
+span.gradle{
+
+	color: #9900FF;
+}
+
+span.jpa{
+
+	color: #663300;
+}
+
+span.hibernate{
+
+	color: #6B6B47;
+}
+
+span.simple{
+
+	font-weight: bold;
+	text-decoration: none;
+}
+
 h1{
 
 	position: fixed;
