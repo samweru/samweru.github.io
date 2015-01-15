@@ -74,6 +74,12 @@ span.simple{
 	text-decoration: none;
 }
 
+sup.demo{
+
+	color:red;
+	font-weight: bold;
+}
+
 h1{
 
 	position: fixed;
