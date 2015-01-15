@@ -74,10 +74,27 @@ span.simple{
 	text-decoration: none;
 }
 
+div.invert{
+
+	-webkit-transform:rotate(-180deg);
+	-moz-transform:rotate(-180deg);
+	-o-transform:rotate(-180deg);
+	transform:rotate(-180deg);
+	ms-filter:"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+	filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+	display: inline-block;
+	padding: 0;
+	margin:0;
+}
+
+sup{
+
+	font-weight: bold;
+}
+
 sup.demo{
 
 	color:red;
-	font-weight: bold;
 }
 
 h1{
@@ -101,6 +118,7 @@ h1 a{
 
 	text-decoration: none;
 	color: #fff;
+	white-space: nowrap;
 }
 
 h1 a:hover{
