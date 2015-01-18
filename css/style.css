@@ -74,6 +74,11 @@ span.simple{
 	text-decoration: none;
 }
 
+span.bungeni{
+
+	color: #b83d00 !important;
+}
+
 div.invert{
 
 	-webkit-transform:rotate(-180deg);
