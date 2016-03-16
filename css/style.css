@@ -245,6 +245,7 @@ div{
 #contact-form{
 
 	 margin: 0 auto;
+	 display: block;
 }
 
 #contact-form div{
