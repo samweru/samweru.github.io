@@ -231,15 +231,24 @@ div{
 
 @media screen and (max-width: 480px){
 
-	h1{
-
-    	height: 60px;
-    }
-
     #contact-form {
 
         width:80%;
     }
+}
+
+#contact{
+
+	padding: 10px;
+	background-color: darkred;
+	color: white;
+	border: 1px #000 solid;
+	font-size: 12px;
+}
+
+#contact:hover{
+
+	background-color: green;
 }
 
 #contact-form{
