@@ -6,17 +6,18 @@
         return pattern.test(emailAddress);
     };
 
-    function infoMsg(){
+    function infoMsg(msg){
 
     	$("#info")
         	.css({color:"lightgreen"})
         	.html(msg);
 
-    	setTimeout(function(msg){
+    	setTimeout(function(){
 
         	$("#info").empty();
         },3000);
     }
+
     function errMsg(msg){
 
     	$("#info")
