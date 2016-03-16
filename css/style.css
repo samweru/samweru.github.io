@@ -7,6 +7,7 @@
 body{
 
 	margin-top: 50px;
+	width: 100%;
 }
 
 a{
@@ -206,7 +207,6 @@ div{
 	height: 100%;
 	top: 0;
 	left: 0;
-	background: rgba(0,0,0,0.9);
 	margin: 0;
 	visibility: visible;
 	background: rgba(0, 0, 0, 0.7);
@@ -266,7 +266,6 @@ div{
 
 	display: block;
 	max-width: 90%;
-	/*min-width: 335px;*/
 }
 
 #contact-form div input{
@@ -274,7 +273,6 @@ div{
 	width:100%;
 	padding: 15px 15px;
 	max-width: 90%;
-	/*min-width: 335px;*/
 }
 
 #contact-form div textarea{
@@ -286,6 +284,13 @@ div{
     min-height: 183px;
 }
 
+#contact-form div input, 
+#contact-form div textarea,
+#contact-form #send{
+
+	border: 1px #000 solid;
+}
+
 #contact-form #send{
 
 
@@ -293,9 +298,30 @@ div{
     height: 70px;
     width:100%;
     max-width: 90%;
-    /*min-width: 335px;*/
     line-height: 15px;
     font-size: 16px;
     font-weight: bold;
     overflow: hidden;
+}
+
+#spacer{
+
+	width:100%;
+	text-align: right;
+}
+
+#close{
+
+	background-color: darkred;
+	color: white;
+	border:1px solid #000;
+	padding:10px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-right:50px;
+}
+
+#close:hover{
+
+	background-color: green;
 }

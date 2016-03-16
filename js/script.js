@@ -34,10 +34,15 @@
     $("input[type=text],textarea").focus(function(){
 
 		$(this)
-			.css("border-color","#aaa");
+			.css("border","1px #000 solid");
 	});
 
 	$("#contact").click(function(){
+
+		$(".overlay").show();
+	});
+
+	$("#close").click(function(){
 
 		$(".overlay").show();
 	});
