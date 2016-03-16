@@ -3,18 +3,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script>
-		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  // (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  // (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  // m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		  ga('create', 'UA-63320420-1', 'auto');
-		  ga('send', 'pageview');
+		  // ga('create', 'UA-63320420-1', 'auto');
+		  // ga('send', 'pageview');
 
 		</script>
 	</head>
 	<body>
-		<h1><a target="_blank" href="https://github.com/samweru">s@M.<div class="invert">m</div><div class="invert">3</div>rU</a></h1>
+		<h1>
+			<a target="_blank" href="#" id="username">s@M.<div class="invert">m</div><div class="invert">3</div>rU</a>
+			<a target="_blank" href="https://github.com/samweru">
+				<img id="github-logo" src="images/github-logo-small-transparent.gif"/>
+			</a>
+			<a href="#" id="contact">Contact</a>
+		</h1>
 		<div>
 			<b>PHP</b></br>
 			<ul>
@@ -100,13 +106,13 @@
 				<li><span class="weight">-</span>&nbsp;
 					<a target="_blank" href="http://samweru.bitbucket.org/irec">IREC</a>
 					<p>Tech: <span class="jquery">jQuery</span> <a target="_blank" href="https://github.com/samweru/jquery-routr#jquery-routr"><span class="routr">routr</span></a>
-								& <a target="_blank" href="http://responsiveslides.com">Responsive Slides</a></p></li>
+								&amp; <a target="_blank" href="http://responsiveslides.com">Responsive Slides</a></p></li>
 				<li><span class="weight">-</span>&nbsp;
 					<a target="_blank" href="http://samweru.bitbucket.org/sibi">SIBI</a>
 					<p>Tech: <span class="jquery">jQuery</span> 
 						<a target="_blank" href="http://getbootstrap.com/">
 							<span class="routr">Bootstrap</span></a>
-								& <a target="_blank" href="https://github.com/samweru/strukt-strukt">Strukt Framework</a></p></li>
+								&amp; <a target="_blank" href="https://github.com/samweru/strukt-strukt">Strukt Framework</a></p></li>
 			</ul>
 		</div>
 		<div>
@@ -124,5 +130,34 @@
 				</li>
 			</ul>
 		</div>
+
+		<div class="overlay">
+			<form id="contact-form">
+				<div id="info">
+
+				</div>
+				<div>
+					<label for="name">Name</label>
+					<input type="text" id="name">
+				</div>
+				<div>
+					<label for="email">Email</label>
+					<input type="email" id="email">
+				</div>
+				<div>
+					<label for="subject">Subject</label>
+					<input type="text" id="subject">
+				</div>
+				<div>
+					<label for="message">Message</label>
+					<textarea id="message"></textarea>
+				</div>
+				<div>
+					<button id="send">Send</button>
+				</div>
+			</form>
+		</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/script.js"></script>
 	</body>
 </html>
