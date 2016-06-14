@@ -110,4 +110,41 @@
 
 	});
 
+	$("form").submit(function(e){
+
+		e.preventDefault();
+
+		if($("form")[0].checkValidity()){
+
+			$.ajax({
+
+				url: "http://formspree.io/pitsolu@gmail.com",
+	            method: "POST",
+	            data: {
+	                    "name":$("#name").val(),
+	                    "_replyto":$("#email").val(),
+	                    "_subject":$("#subject").val(),
+	                    "message":$("#message").val()
+	                },
+	            dataType: "json"
+
+			})
+			.success(function(){
+
+	                $("#name").val("");
+	                $("#email").val("");
+	                $("#subject").val("");
+	                $("#message").val("");
+
+	        	// infoMsg("Thank you. Your message has been sent.");
+	        	console.log("Thank you. Your message has been sent.");
+	        })
+	        .error(function(){
+
+	            // errMsg("Something went wrong!!!");
+	            console.log("Something went wrong!");
+	        });
+		}
+	})
+
 })(jQuery);
