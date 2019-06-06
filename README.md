@@ -12,15 +12,15 @@ Demo image (not included) courtesy of Unsplash, a radtastic collection of CC0 (p
 
 ### Feedback, bug reports, and comments... 
 
-...Welcome, but strongly encouraged :)
+...not only welcome, but strongly encouraged :)
 
-AJ | [aj@lkn.io](aj@lkn.io) | [@ajlkn](twitter.com/ajlkn)
+AJ - [aj@lkn.io](aj@lkn.io) | [@ajlkn](twitter.com/ajlkn)
 
 PS: Not sure how to get that contact form working? Give [aj@lkn.io](formspree.io) a try (it's awesome).
 
 ### LICENSE
 
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+Free for personal and commercial use under the [CCA 3.0 license](html5up.net/license)
 
 ### Credits:
 
@@ -30,7 +30,7 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 
 * Other:
 	- [jQuery](jquery.com)
-	- html5shiv.js | [@afarkas](twitter.com/afarkas) | [@jdalton](twitter.com/jdalton) [@jon_neal](twitter.com/jon_neal) [@rem](twitter.com/rem)
+	- html5shiv.js | [@afarkas](twitter.com/afarkas) | [@jdalton](twitter.com/jdalton) | [@jon_neal](twitter.com/jon_neal) | [@rem](twitter.com/rem)
 	- [CSS3 Pie](css3pie.com)
 	- [Respond.js](j.mp/respondjs)
 	- [Skel](skel.io)
