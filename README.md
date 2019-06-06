@@ -16,7 +16,7 @@ Demo image (not included) courtesy of Unsplash, a radtastic collection of CC0 (p
 
 AJ - [aj@lkn.io](aj@lkn.io) | [@ajlkn](twitter.com/ajlkn)
 
-PS: Not sure how to get that contact form working? Give [aj@lkn.io](formspree.io) a try (it's awesome).
+PS: Not sure how to get that contact form working? Give [formspree.io](formspree.io) a try (it's awesome).
 
 ### LICENSE
 
