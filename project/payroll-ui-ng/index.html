@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title></title>
+	<script src="lib/angular/angular.min.js"></script>
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script src="lib/taffy/taffy-min.js"></script>
+	<script src="src/lib/faker.min.js"></script>
+	<script src="lib/angular-mocks/angular-mocks.js"></script>
+	<script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="lib/angular-cookies/angular-cookies.min.js"></script>
+	<script src="lib/jquery-ui/jquery-ui.min.js"></script>
+	<script src="lib/simplr-grid/dist/jquery.simplr-grid.min.js"></script>
+	<script src="lib/gasparesganga-jquery-loading-overlay/dist/loadingoverlay.min.js"></script>
+	<script src="lib/growl/javascripts/jquery.growl.js" type="text/javascript"></script>
+
+	<script src="src/helper.js"></script>
+	<script src="src/db/payroll.js"></script>
+	<script src="src/app/main.js"></script>
+	<script src="src/app/runner.js"></script>
+	<script src="src/app/validation.js"></script>
+	<script src="src/app/directives/dialog.js"></script>
+	<script src="src/app/directives/simplr-grid.js"></script>
+	<script src="src/app/directives/tree-menu.js"></script>
+	<script src="src/app/directives/currency.js"></script>
+
+	<script src="dist/app/core.min.js"></script>
+
+	<!-- <script src="dist/app/core.min.js"></script> -->
+	
+	<link type="text/css" rel="stylesheet" href="lib/jquery-ui/themes/smoothness/jquery-ui.min.css">
+	<link type="text/css" rel="stylesheet" href="css/style.css">
+	<link type="text/css" rel="stylesheet" href="lib/simplr-grid/css/style.css">
+	<link rel="stylesheet" type="text/css" href="lib/growl/stylesheets/jquery.growl.css">
+</head>
+<body>
+	<script type="text/ng-template" charset="utf-8" id="rates.html">
+		<a ui-sref="rates.nhif" 
+			ng-click="active=1"
+			ng-class="{'active':active===1}"
+			class="tab-head">NHIF</a>
+		<span>&nbsp;|&nbsp;</span>
+		<a ui-sref="rates.paye" 
+			ng-click="active=2"
+			ng-class="{'active':active===2}"
+			class="tab-head">PAYE</a>
+		<span>&nbsp;|&nbsp;</span>
+		<a ui-sref="rates.taxrelief" 
+			ng-click="active=3"
+			ng-class="{'active':active===3}"
+			class="tab-head">Tax Relief</a>
+		<br><span>&nbsp;</span>
+		<div ui-view="rate-details"></div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="relief.html">
+		<div ng-controller="taxReliefController" ng-init="newDisable=true">
+			<form ng-submit="submit()">
+				<input type="hidden" name="id" ng-model="id">
+				<table>
+					<tr>
+						<td>
+							<input type="text" name="name" 
+									ng-model="name"
+									placeholder="Name"
+									size='32'>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Kshs.&nbsp;<input currency type="text" name="amount" 
+									ng-model="amount"
+									placeholder="Monthly Amount"
+									style="text-align: right">
+						</td>
+					</tr>
+					<tr>
+						<td><label for="active">
+							<input type="checkbox" name="active" 
+									ng-model="active"
+									ng-true-value="'Yes'" 
+									ng-false-value="'No'">
+						Active?</label></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="button" value="New" 
+									ng-click="addNew()" ng-disabled="newDisable">
+							<input type="submit" value="Submit">
+						</td>
+					</tr>
+				</table>
+			</form>
+			<table jq-simplr-grid 
+					id='relief-tbl'
+					url="/data/relief"
+					method="POST"
+					title="Tax Relief"
+					use-pager="false"
+					single-select="true"
+					fix-left-column="true"
+					fix-header="true"
+					resize-columns="true"
+					columns="{
+
+						id:{name:'#', css:{display:'none'}},
+						name:{name:'Name', css:{width:'200px'}},
+						amount:{name:'Amount', css:{textAlign:'right', width:'100px'}},
+						active:{name:'Active&nbsp;'}
+					}"
+					css="{capsuleWidth:'100%',gridHeight:'300px'}"
+					pager="{page:1,rows:10,list:[10,20]}"
+					dbl-click-row="dblClick"
+					custom-ajax-loader="customLoader"
+					get-toolbars="toolbars"></table>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="nhif.html">
+		<div ng-controller="nhifController" ng-init="disableNew=true">
+			<form ng-submit="submit()">
+				<table>
+					<tr><td>Kshs.
+						<input currency type="text" 
+									name="lbound" 
+									ng-model="lbound"
+									placeholder="Lower Bound"
+									style="text-align:right">
+						</td>
+					</tr>
+					<tr><td>Kshs.
+						<input currency type="text" 
+									name="ubound" 
+									ng-model="ubound"
+									placeholder="Upper Bound"
+									style="text-align:right">
+						</td>
+					</tr>
+					<tr><td>Kshs.
+						<input currency type="text" 
+									name="amount" 
+									ng-model="amount"
+									placeholder="Amount"
+									style="text-align:right">
+						</td>
+					</tr>
+					<tr><td>
+							<input type="button" value="New" 
+								ng-disabled="disableNew"
+								ng-click="addNew()">
+							<input type="submit" text="Submit">
+						</td>
+					</tr>
+				</table>
+			</form>
+			<table jq-simplr-grid 
+					id='nhif-tbl'
+					url="/data/nhif"
+					method="POST"
+					title="NHIF"
+					use-pager="false"
+					single-select="true"
+					fix-left-column="true"
+					columns="{
+
+						id:{css:{display:'none'}},
+						lbound:{name:'Lower Bound', css:{textAlign:'right', width:'100px'}},
+						ubound:{name:'Upper Bound', css:{textAlign:'right', width:'100px'}},
+						amt:{name:'Amount', css:{textAlign:'right', width:'100px'}},
+					}"
+					fix-header="true"
+					resize-columns="true"
+					css="{capsuleWidth:'100%',gridHeight:'300px'}"
+					pager="{page:1,rows:10,list:[10,20]}"
+					dbl-click-row="dblClick"
+					custom-ajax-loader="customLoader"
+					get-toolbars="toolbars"></table>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="paye.html">
+		<div ng-controller="payeController" ng-init="disableNew=true">
+			<form ng-submit="submit()">
+				<input type="hidden" name="id" ng-model="id">
+				<table>
+					<tr><td>Kshs.
+						<input currency type="text" 
+									name="lbound" 
+									ng-model="lbound"
+									placeholder="Lower Bound"
+									style="text-align:right">
+						</td>
+					</tr>
+					<tr><td>Kshs.
+						<input currency type="text" 
+									name="ubound" 
+									ng-model="ubound"
+									placeholder="Upper Bound"
+									style="text-align:right">
+						</td>
+					</tr>
+					<tr><td><input type="text" 
+									name="tax_rate" 
+									ng-model="tax_rate"
+									placeholder="Tax Rate"
+									style="text-align:right"> %
+						</td>
+					</tr>
+					<tr><td>
+							<input type="button" value="New" 
+									ng-disabled="disableNew"
+									ng-click="addNew()">
+							<input type="submit" text="Submit" ng-click="submit">
+						</td>
+					</tr>
+				</table>
+			</form>
+			<table jq-simplr-grid 
+					id='paye-tbl'
+					url="/data/paye"
+					method="POST"
+					title="Paye"
+					use-pager="false"
+					single-select="true"
+					fix-left-column="true"
+					fix-header="true"
+					resize-columns="true"
+					columns = "{
+						id:{css:{display:'none'}},
+						lbound:{name:'Lower Bound', css:{textAlign:'right', width:'150px'}},
+						ubound:{name:'Upper Bound', css:{textAlign:'right', width:'150px'}},
+						rate_perc:{name:'Tax Rate&nbsp;'}
+					}"
+					css="{capsuleWidth:'100%',gridHeight:'300px'}"
+					pager="{page:1,rows:10,list:[10,20]}"
+					dbl-click-row="dblClick"
+					custom-ajax-loader="customLoader"
+					get-toolbars="toolbars"></table>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="period.html">
+		<div ng-controller="periodController">
+			<div jq-dialog
+					id="period-msg-dlg"
+					title="Period"
+					modal="true"
+					open={{dialogMsgPeriodOpen}}
+					ok-button="Ok"
+					ok-callback="okMsgPeriodHandle">
+					{{messagePeriod}}
+			</div>
+			<div jq-dialog
+					id="period-confirm-dlg"
+					title="Period"
+					modal="true"
+					open={{dialogConfirmPeriodOpen}}
+					ok-button="Yes"
+					ok-callback="okConfirmPeriodHandle"
+					cancel-button="No"
+					cancel-callback="cancelConfirmPeriodHandle"
+					hide-close-button="false">
+					{{confirmPeriod}}
+			</div>
+			<div jq-dialog
+					id="period-dlg"
+					title="Period"
+					modal="true"
+					open={{dialogPeriodOpen}}
+					cancel-callback="cancelHandle"
+					hide-close-button="false"
+					get-toolbars="toolbars">
+				<form ng-submit="submit()">
+					<input type="hidden" name="id" ng-model="id">
+					<table>
+						<tr>
+							<td class="caption">Start Date</td>
+							<td>
+								<input type="date" name="start_date" 
+										ng-model="start_date"
+										placeholder="Start Date">
+							</td>
+						</tr>
+						<tr>
+							<td class="caption">End Date</td>
+							<td>
+								<input type="date" name="end_date" 
+										ng-model="end_date"
+										placeholder="End Date">
+							</td>
+						</tr>
+						<tr>
+							<td class="caption">Description</td>
+							<td><textarea rows="5" cols="35" 
+											name="descr" 
+											ng-model="descr"></textarea></td>
+						</tr>
+						<tr>
+							<td class="caption">Status</td>
+							<td>
+								{{period_status}}
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<label for="active">
+									<input type="checkbox" id="active" name="active" 
+											ng-model="active"
+											ng-true-value="'Yes'" 
+											ng-false-value="'No'">
+									Active?
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<input type="submit" value="Submit">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<table jq-simplr-grid 
+				id='period-tbl'
+				url="/data/period"
+				method="POST"
+				title="Period"
+				use-pager="true"
+				single-select="true"
+				fix-left-column="true"
+				fix-header="true"
+				resize-columns="true"
+				columns="{'id':{name:'#', css:{display:'none'}}}"
+				css="{capsuleWidth:'100%',gridHeight:'300px',gridWidth:'90%'}"
+				pager="{page:1,rows:10,list:[10,20]}"
+				dbl-click-row="dblClick"
+				custom-ajax-loader="customLoader"
+				get-toolbars="toolbars"></table>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="employee.html">
+		<form ng-submit="submit()">
+			<input type="hidden" name="id" ng-model="id">
+			<table>
+				<tr>
+					<td class="caption">IDNo</td>
+					<td colspan="3">
+						<input type="text" name="idno" ng-model="idno" maxlength="7" pattern="[0-9]+">
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Surname</td>
+					<td><input type="text" name="surname"
+											ng-model="surname"></td>
+					<td class="caption">Othernames</td>
+					<td><input type="text" name="othernames" 
+											ng-model="othernames"></td>
+				</tr>
+				<tr>
+					<td class="caption">Post</td>
+					<td colspan="3">
+						<select ng-model="post_"
+								ng-options="post.id as post.name for post in posts track by post.id"></select>
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Address 1</td>
+					<td><textarea rows="5" cols="30" 
+									name="address" 
+									ng-model="address"></textarea></td>
+					<td class="caption">Address 2</td>
+					<td><textarea rows="5" cols="30" 
+									name="other_address" 
+									ng-model="other_address"></textarea></td>
+				</tr>
+				<tr>
+					<td class="caption">Phone 1</td>
+					<td><input type="text" name="mobile" ng-model="mobile"></td>
+					<td class="caption">Phone 2</td>
+					<td><input type="text" name="other_mobile" ng-model="other_mobile"></td>
+				</tr>
+				<tr>
+					<td class="caption">Email 1</td>
+					<td><input type="text" name="email" ng-model="email"></td>
+					<td class="caption">Email 2</td>
+					<td><input type="text" name="other_email" ng-model="other_email"></td>
+				</tr>
+				<tr>
+					<td class="caption">NSSF</td>
+					<td><input type="text" name="nssf" ng-model="nssf"></td>
+					<td class="caption">NHIF</td>
+					<td><input type="text" name="nhif" ng-model="nhif"></td>
+				</tr>
+				<tr>
+					<td class="caption">PIN</td>
+					<td colspan="3">
+						<input type="text" name="pin" ng-model="pin">
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Gender</td>
+					<td colspan="3">
+						<select ng-model="gender_" 
+								ng-options="gender.id as gender.name for gender in genders track by gender.id"></select>
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Country</td>
+					<td><input type="text" name="country" ng-model="country"></td>
+					<td class="caption">City</td>
+					<td><input type="text" name="city" ng-model="city"></td>
+				</tr>
+				<tr>
+					<td class="caption">DOB</td>
+					<td colspan="3">
+						<input type="date" name="dob" ng-model="dob">
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Start Date</td>
+					<td><input type="date" name="start_date" ng-model="start_date"></td>
+					<td class="caption">End Date</td>
+					<td><input type="date" name="end_date" ng-model="end_date"></td>
+				</tr>
+				<tr>
+					<td class="caption">Marital Status</td>
+					<td colspan="3">
+						<select ng-model="marital_status"
+								ng-options="status.id as status.name for status in maritalStatus track by status.id"></select>
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Bank Details</td>
+					<td colspan="3">
+						<textarea rows="5" cols="30" ng-model="bank_details"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="caption">Active</td>
+					<td colspan="3">
+						<input type="checkbox" name="active" ng-model="active"
+								ng-true-value="'Active'"
+								nt-false-value="'Inactive'">
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan="3">
+						<input type="submit" value="Submit">
+						<!-- <input type="reset" value="Reset"> -->
+					</td>
+				</tr>
+			</table>
+		</form>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="payroll-details.html">
+		<div ng-controller="payrollController" ng-init="mask=true">
+			<form ng-submit="submit()">
+				<input type="hidden" name="id" ng-model="pay.id">
+				<span>
+					Employee:
+					<b>{{employeeName}}</b>
+				</span></br>
+				<span>&nbsp;</span>
+				<table>
+					<tr>
+						<td class="caption">Basic Salary</td>
+						<td>
+							<input ng-hide="mask" currency 
+									type="text" name="salary" 
+									ng-model="pay.salary"
+									style="text-align:right">
+							<input ng-show="mask" type="password" name="salary" 
+									ng-model="pay.salary"
+									style="text-align:right">
+							<label for="mask">Mask
+								<input name="mask" type="checkbox" ng-model="mask">
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="caption">Insurance Relief</td>
+						<td>
+							<input currency type="text" name="in_relief" ng-model="pay.in_relief"
+									style="text-align:right">
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" value="Submit">
+						</td>
+					</tr>
+				</table>
+			</form>
+			<table>
+				<tr>
+					<td>
+						<span>&nbsp;</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button ng-click="removeEmployeeBenefit()">Remove</button>
+						&nbsp;|&nbsp;
+						<select name="benefit"
+								ng-model="benefit" 
+								ng-options="benefit.id as benefit.name for benefit in benefits track by benefit.id"
+								ng-change="addEmployeeBenefit()">
+							<option disabled value="">Add Benefit/Deduction</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<div style="display: block;width: 100%">
+				<div style="float: left;width:50%">
+					<table jq-simplr-grid 
+						id='benefits-tbl'
+						url="/data/benefits"
+						method="POST"
+						title="Benfits & Deductions"
+						columns="{
+
+							id:{css:{display:'none'}},
+							name:{name:'Name', css:{width:'100px'}},
+							amount:{name:'Amount', css:{width:'75px'}},
+							type:{name:'Type', css:{width:'75px'}},
+							taxable:{name:'Taxable', css:{width:'75px'}},
+						}"
+						single-select="true"
+						fix-left-column="true"
+						fix-header="true"
+						resize-columns="true"
+						css="{capsuleWidth:'100%', gridHeight:'300px'}"
+						pager="{page:1,rows:10,list:[10,20]}"
+						dbl-click-row="dblClick"
+						custom-ajax-loader="customLoader"></table>
+				</div>
+			</div>
+			<div jq-dialog
+					id="benefits-dlg"
+					title="Benefits/Deductions"
+					modal="true"
+					open={{dialogMsgOpen}}
+					ok-button="Ok"
+					ok-callback="okHandle"
+					width="300">
+				{{message}}
+			</div>	
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="employee-add.html">
+		<div ng-controller="employeeController" ng-include src="'employee.html'"></div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="employee-edit.html">
+		<a ui-sref="employee.details"
+			ng-click="active=1" 
+			ng-class="{'active':active===1}"
+			class="tab-head">Employee Details</a>
+		<span>&nbsp;|&nbsp;</span>
+		<a ui-sref="employee.payroll" 
+			ng-click="active=2"
+			ng-class="{'active':active===2}"
+			class="tab-head">Payroll Details</a>
+		<br><span>&nbsp;</span>
+		<div ui-view="employee-details"></div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="employees.html">
+		<table jq-simplr-grid 
+				id='employees-tbl'
+				url="/data/employees"
+				method="POST"
+				title="Employees"
+				use-pager="true"
+				single-select="true"
+				fix-left-column="true"
+				fix-header="true"
+				resize-columns="true"
+				columns="{
+
+					'id':{name:'#', css:{display:'none', width:'10px'}},
+					'idno':{name:'IdNo', css:{width:'50px'}},
+					'othernames':{name:'Other Names', css:{width:'100px'}},
+					'surname':{name:'Surname', css:{width:'100px'}},
+					'email':{name:'Email', css:{width:'200px'}}
+				}"
+				css="{capsuleWidth:'100%',gridHeight:'400px', gridWidth:'700px'}"
+				pager="{page:1,rows:10,list:[10,20]}"
+				dbl-click-row="dblClick"
+				custom-ajax-loader="customLoader"
+				get-toolbars="toolbars"></table>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="benefits.html">
+		<div ng-controller="benefitsController">
+			<div jq-dialog
+					id="benefits-dlg"
+					title="Benefits/Deductions"
+					modal="true"
+					open={{dialogBenefitsOpen}}
+					cancel-callback="cancelHandle"
+					hide-close-button="false">
+				<form id="benefit-form" ng-submit="submit()">
+					<input type="hidden" name="id" ng-model="benefit.id">
+					<table>
+						<tbody>
+							<tr>
+								<td class="caption">Name</td>
+								<td valign="top" align="left" colspan="2">
+									<input id="name" name="name" type="text" ng-model="name">
+								</td>
+							</tr>
+							<tr>
+								<td class="caption">Amount</td>
+								<td ng-if="perc==='Yes'" 
+									valign="top" align="left" colspan="2">
+									<input type="number" 
+											name="amt" 
+											min="1" max="100"
+											ng-model="amt"
+											style="text-align: right">&nbsp;%
+								</td>
+								<td ng-if="perc==='No'" 
+									valign="top" align="left" colspan="2">
+									<input currency 
+											name="amt" 
+											type="text" 
+											ng-model="amt"
+											style="text-align: right">
+								</td>
+							</tr>
+							<tr>
+								<td class="caption">Type</td>
+								<td valign="top" align="left" colspan="2">
+									<select id="type"
+										name="type"
+										ng-model="type"
+										ng-options="type.id as type.name for type in benefit_types track by type.id"></select>
+								</td>
+							</tr>
+							<tr>
+								<td class="caption">Description</td>
+								<td valign="top" align="left" colspan="2">
+									<textarea id="descr" name="descr" rows="5" cols="40" 
+												ng-model="descr"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td valign="top" align="left">
+									<label><input type="checkbox" id="perc" name="perc" 
+												ng-model="perc"
+												ng-true-value="'Yes'" 
+												ng-false-value="'No'">
+									Percentage?</label>
+								</td>
+							</tr>
+							<!-- <tr>
+								<td></td>
+								<td valign="top" align="left">
+									<label><input type="checkbox" id="deduct" name="deduct" 
+												ng-model="deduct"
+												ng-true-value="'Yes'" 
+												ng-false-value="'No'">
+									Deduction?</label>
+								</td>
+							</tr> -->
+							<tr>
+								<td></td>
+								<td valign="top" align="left">
+									<label for="taxable">
+										<input type="checkbox" id="taxable" name="taxable" 
+												ng-model="taxable"
+												ng-true-value="'Yes'" 
+												ng-false-value="'No'">
+									Taxable?</label>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td valign="top" align="left">
+									<label for="active">
+										<input type="checkbox" id="active" name="active" 
+													ng-model="active"
+													ng-true-value="'Yes'" 
+													ng-false-value="'No'">
+									Active?</label>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td valign="top" align="left" colspan="2">
+									<span id="buttons-benefits-form">
+										<input type="submit" value="Submit">
+									</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+			<table jq-simplr-grid 
+				id='benefits-tbl'
+				url="/data/benefits"
+				method="POST"
+				title="Benfits & Deductions"
+				use-pager="true"
+				single-select="true"
+				fix-left-column="true"
+				fix-header="true"
+				resize-columns="true"
+				columns="{
+
+					'id':{name:'#', css:{display:'none'}},
+					'name':{name:'Name', css:{width:'150px'}},
+					'amount':{name:'Amount', css:{width:'100px', textAlign:'right', paddingRight:'10px'}},
+					'percentage':{name:'Percentage', css:{width:'100px'}},
+					'deduct':{name:'Deduction', css:{width:'100px'}},
+					'taxable':{name:'Taxable', css:{width:'100px'}},
+					'active':{name:'Active', css:{width:'100px'}}
+				}"
+				css="{capsuleWidth:'100%',gridHeight:'300px'}"
+				pager="{page:1,rows:10,list:[10,20]}"
+				dbl-click-row="dblClick"
+				custom-ajax-loader="customLoader"
+				get-toolbars="toolbars"></table>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="posts.html">
+		<div ng-controller="postsController">
+			<table jq-simplr-grid 
+					id='posts-tbl'
+					url="/data/posts"
+					method="POST"
+					title="Posts"
+					use-pager="true"
+					single-select="true"
+					fix-left-column="true"
+					fix-header="true"
+					resize-columns="true"
+					columns="{
+
+						'id':{name:'#', css:{display:'none'}},
+						'dept_id':{name:'Dept Id', css:{display:'none'}},
+						'dept_name':{name:'Dept.', css:{width:'200px'}},
+						'name':{name:'Post', css:{width:'200px'}},
+					}"
+					css="{capsuleWidth:'100%',gridHeight:'400px'}"
+					pager="{page:1,rows:10,list:[10,20]}"
+					dbl-click-row="dblClick"
+					custom-ajax-loader="customLoader"
+					get-toolbars="toolbars"></table>
+			<div jq-dialog
+					id="post-dlg"
+					title="Post"
+					modal="true"
+					open={{dialogPostOpen}}
+					cancel-callback="cancelHandle"
+					hide-close-button="false">
+				<form id="post-form" ng-submit="submit()">
+					<input type="hidden" name="id" ng-model="id">
+					<table>
+						<tbody>
+							<tr>
+								<td valign="top" align="right">Post</td>
+								<td valign="top"><input id="name" 
+														name="name" type="text"
+														ng-model="name"></td>
+							</tr>
+							<tr>
+								<td valign="top" align="right">Dept.</td>
+								<td valign="top">
+									<select id="dept" 
+											name="dept"
+											ng-model="dept"
+											ng-options="dept.id as dept.descr for dept in depts track by dept.id"></select>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" align="right">Description</td>
+								<td valign="top">
+									<textarea id="descr" 
+												name="descr" rows="5" cols="30"
+												ng-model="descr"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" align="right"></td>
+								<td valign="top">
+									<input type="submit" value="Submit">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="depts.html">
+		<div ng-controller="deptsController">
+			<table jq-simplr-grid 
+					id='depts-tbl'
+					url="/data/depts"
+					method="POST"
+					title="Departments"
+					use-pager="true"
+					single-select="true"
+					fix-left-column="true"
+					fix-header="true"
+					resize-columns="true"
+					columns="{
+
+						'id':{name:'#', css:{display:'none'}},
+						'alias':{name:'Alias', css:{width:'50px'}},
+						'descr':{name:'Description', css:{width:'250px'}}
+					}"
+					css="{capsuleWidth:'100%',gridHeight:'400px'}"
+					pager="{page:1,rows:10,list:[10,20]}"
+					dbl-click-row="dblClick"
+					custom-ajax-loader="customLoader"
+					get-toolbars="toolbars"></table>
+			<div jq-dialog
+					id="dept-dlg"
+					title="Departments"
+					modal="true"
+					open={{dialogDeptOpen}}
+					cancel-callback="cancelHandle"
+					hide-close-button="false">
+				<form id="dept-form" ng-submit="submit()">
+					<input type="hidden" name="id" ng-model="id">
+					<table>
+						<tbody>
+							<tr>
+								<td valign="top" align="right">Alias</td>
+								<td valign="top">
+									<input id="alias" 
+											alias="alias" type="text" 
+											ng-model="alias">
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" align="right">Description</td>
+								<td valign="top">
+									<textarea id="descr" 
+												name="descr" rows="5" cols="30" 
+												ng-model="descr"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" align="right"></td>
+								<td valign="top">
+									<input type="submit" value="Submit">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="roles.html">
+		<div ng-controller="rolesController">
+			<table jq-simplr-grid 
+					id='roles-tbl'
+					url="/data/roles"
+					method="POST"
+					title="Roles"
+					use-pager="true"
+					single-select="true"
+					fix-left-column="true"
+					fix-header="true"
+					resize-columns="true"
+					columns="{
+
+						'id':{name:'#', css:{display:'none'}},
+						'name':{name:'Name', css:{width:'200px'}},
+						'descr':{name:'Description', css:{width:'200px'}}
+					}"
+					css="{capsuleWidth:'100%',gridHeight:'400px'}"
+					pager="{page:1,rows:10,list:[10,20]}"
+					dbl-click-row="dblClick"
+					custom-ajax-loader="customLoader"
+					get-toolbars="toolbars"></table>
+			<div jq-dialog
+					id="role-dlg"
+					title="Role"
+					modal="true"
+					open={{dialogRoleOpen}}
+					cancel-callback="cancelHandle"
+					hide-close-button="false">
+				<form id="role-form" ng-submit="submit()">
+					<table>
+						<tbody>
+							<tr>
+								<td valign="top" align="right">Role</td>
+								<td valign="top">
+									<input id="name" 
+											name="name" 
+											type="text" 
+											ng-model="name">
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" align="right">Description</td>
+								<td valign="top">
+									<textarea id="descr" 
+												name="descr" 
+												rows="5" cols="30" 
+												ng-model="descr"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" align="right"></td>
+								<td valign="top">
+									<input type="submit" value="Submit">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</script>
+	<script type="text/ng-template" charset="utf-8" id="login.html">
+		<div ng-controller="loginController" style="display:none;">
+			<div jq-dialog
+				id="login-dlg"
+				title="Login"
+				auto-open="true"
+				modal=true
+				open={{dialogLoginOpen}}>
+				<table>
+					<tr>
+						<td class="caption">Username</td>
+						<td>
+							<input type="text" name="username" ng-model="login.username"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="caption">Password</td>
+						<td>
+							<input type="password" name="password" ng-model="login.password"/>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<button ng-click="submit()">Submit</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div jq-dialog 
+					id="auth-msg-dlg"
+					title="Authentication"
+					modal="true"
+					open={{dialogMsgOpen}}
+					ok-button="Ok"
+					ok-callback="okHandle"
+					width="300">{{message}}</div>
+	    </div>
+    </script>
+    <script  type="text/ng-template" charset="utf-8" id="users.html">
+    	<div ng-controller="usersController">
+    		<table jq-simplr-grid 
+				id='user-tbl'
+				url="/data/users"
+				method="POST"
+				title="Users"
+				use-pager="false"
+				single-select="true"
+				fix-left-column="true"
+				fix-header="true"
+				resize-columns="true"
+				columns="{
+					'id':{name:'#', css:{display:'none'}},
+					'role_id':{name:'Role Id', css:{display:'none'}},
+					'role_name':{name:'Role Name', css:{width:'200px'}},
+					'username':{name:'Username', css:{width:'100px'}},
+				}"
+				css="{capsuleWidth:'100%',gridHeight:'300px'}"
+				pager="{page:1,rows:10,list:[10,20]}"
+				dbl-click-row="dblClick"
+				custom-ajax-loader="customLoader"
+				get-toolbars="toolbars"></table>
+			<div jq-dialog
+					id="reset-pw-dlg"
+					title="Reset Password"
+					modal=true
+					open={{dialogResetPassOpen}}
+					ok-button="Yes"
+					ok-callback="okHandle"
+					cancel-button="No"
+					cancel-callback="cancelResetPassHandle">
+					{{message}}
+			</div>
+			<div jq-dialog
+					id="msg-dlg"
+					title="Info"
+					modal=true
+					open={{dialogMsgOpen}}
+					cancel-callback="cancelMsgHandle"
+					hide-close-button="false">
+					{{infomessage}}
+			</div>
+			<div jq-dialog
+					id="user-dlg"
+					title="User"
+					modal=true
+					open={{dialogUserOpen}}
+					cancel-callback="cancelUserHandle"
+					hide-close-button="false">
+				<form name="user-form" ng-submit="submit()">
+					<input type="hidden" name="id" ng-model="id">
+					<table>
+						<tr>
+							<td class="caption">Username</td>
+							<td><input type="text" name="username" ng-model="username"></td>
+						</tr>
+						<tr ng-hide="!id">
+							<td class="caption">Current Password</td>
+							<td><input type="password" name="lpassword" ng-model="lpassword"></td>
+						</tr>
+						<tr>
+							<td class="caption">New Password</td>
+							<td><input type="password" name="password" ng-model="password"></td>
+						</tr>
+						<tr>
+							<td class="caption">Confirm Password</td>
+							<td><input type="password" name="cpassword" ng-model="cpassword"></td>
+						</tr>
+						<tr>
+							<td class="caption">Roles</td>
+							<td>
+								<select name="role" 
+											id="role" 
+											ng-model="role" 
+											ng-options="role.id as role.name for role in roles track by role.id">
+							    </select>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<input type="submit" value="Submit">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+    </script>
+	<div jq-tree-menu class="tree">
+		<ul>
+			<li><span>-</span>
+				<a href="">Administration</a>
+				<ul>
+					<li><a href="#!/roles">Role</a></li>
+					<li><a href="#!/users">User</a></li>
+				</ul>
+			</li>
+			<li><span>-</span>
+				<a href="">Human Resource</a>
+				<ul>
+					<li><a href="#!/employees">Employees</a></li>
+					<li><a href="#!/depts">Department</a></li>
+					<li><a href="#!/posts">Post</a></li>
+				</ul>
+			</li>
+			<li><span>-</span>
+				<a href="">Payroll</a>
+				<ul>
+					<li><a href="#!/rates/nhif">Rates</a></li>
+					<li><a href="#!/benefits">Benefits</a></li>
+					<li><a href="#!/period">Period</a></li>
+					<li><a href="#!/rpt">Reports</a></li>
+				</ul>
+			</li>
+			<li><a href="#!/">Logout</a></li>
+		</ul>
+	</div>
+	<div class="body" ui-view></div>
+</body>
+</html>
