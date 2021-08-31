@@ -34,7 +34,7 @@
 				<footer>
 					<ul class="icons">
 						<li><a href="http://github.com/samweru" class="icon fa-github"><span class="label">Github</span></a></li>
-						<li><a href="mailto:pitsolu@gmail.com" class="icon fa-envelope"><span class="label">Email</span></a></li>
+						<li><a href="mailto:samweru@gmail.com" class="icon fa-envelope"><span class="label">Email</span></a></li>
 					</ul>
 				</footer>
 			</section>
@@ -119,6 +119,7 @@
 										<div class="row uniform">
 											<div class="12u"><textarea name="message" id="message" placeholder="Message" rows="6" required></textarea></div>
 										</div>
+										<!-- <div class="alert">The brrown dirty fox jusmped over the dog!</div> -->
 										<div class="row uniform">
 											<div class="12u">
 												<ul class="actions">
@@ -165,29 +166,41 @@
 			    
 			    async function handleSubmit(event){
 
-			      event.preventDefault();
-			      // var status = document.getElementById("my-form-status");
-			      var data = new FormData(event.target);
+			      	event.preventDefault();
 
-			      fetch(event.target.action,{
+			      	var response = grecaptcha.getResponse();
+					if(response.length == 0){
 
-			        method: form.method,
-			        body: data,
-			        headers: {
+						//reCaptcha not verified
+						alert("Please verify you are humann!"); 
+						evt.preventDefault();
+						return false;
+					}
+					else{
+						// var status = document.getElementById("my-form-status");
+						var data = new FormData(event.target);
 
-			            'Accept': 'application/json'
-			        }
-			      })
-			      .then(response => {
-			        // status.innerHTML = "Thanks for your submission!";
-			        console.log("Thanks for your submission!")
-			        form.reset()
-			      })
-			      .catch(error => {
-			        // status.innerHTML = "Oops! There was a problem submitting your form"
-			        console.log("Oops! There was a problem submitting your form")
-			      });
+						fetch(event.target.action,{
+
+							method: form.method,
+							body: data,
+							headers: {
+
+							    'Accept': 'application/json'
+							}
+						})
+						.then(response => {
+							// status.innerHTML = "Thanks for your submission!";
+							console.log("Thanks for your submission!")
+							form.reset()
+						})
+						.catch(error => {
+							// status.innerHTML = "Oops! There was a problem submitting your form"
+							alert("Oops! There was a problem submitting your form")
+						});
+					}
 			    }
+
 			    form.addEventListener("submit", handleSubmit)
 			</script>
 	</body>

@@ -3071,3 +3071,10 @@
 	z-index: -999999;
 	opacity: 0;
 }
+
+/*#alert{
+
+	border:5px solid red;
+	color:red;
+	padding: 20px;
+}*/
