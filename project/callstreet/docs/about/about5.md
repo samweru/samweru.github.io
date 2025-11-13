@@ -1,0 +1,9 @@
+### About Us
+
+Callstreet Research and Analytics ("Callstreet") is an investment and market research platform with 
+a geographical focus on Sub-Saharan Africa (SSA). We recognize the difficulty businesses face in expanding and doing business in Africa. We recognize that success in Africa can only be achieved with a well-planned and executed strategy based on local knowledge and insights.
+
+We are your foremost business intelligence house and thought leader on the major economies, 
+industries and businesses operating in Sub-Saharan Africa. We pride ourselves on gathering and 
+contextualising the most elusive information and data in the region, which we then interpret and 
+articulate in an objective, factual and actionable manner
