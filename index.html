@@ -1,208 +1,40 @@
-<!DOCTYPE HTML>
-<!--
-	Read Only by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>samweru</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
-	</head>
-	<body>
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/favicon.ico"><title>samweru.github.io</title><script defer="defer" src="/js/chunk-vendors.f8dc9516.js"></script><script defer="defer" src="/js/app.1ae375db.js"></script><link href="/css/app.b2d625b8.css" rel="stylesheet"></head><body><noscript><strong>We're sorry but samweru.github.io doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><script src="assets/js/jquery.min.js"></script><script src="assets/js/jquery.scrollzer.min.js"></script><script src="assets/js/jquery.scrolly.min.js"></script><script src="assets/js/skel.min.js"></script><script src="assets/js/util.js"></script><!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]--><script src="assets/js/main.js"></script><script>var form = document.getElementById("my-form");
+          
+          async function handleSubmit(event){
 
-		<!-- Header -->
-			<section id="header">
-				<header>
-					<span class="image avatar"><img src="images/avatar.png" alt="" /></span>
-					<h1 id="logo"><a href="#">Sam Weru</a></h1>
-					<p>Passionate Programmer</p>
-				</header>
-				<nav id="nav">
-					<ul>
-						<li><a href="#intro" class="active">Intro</a></li>
-						<li><a href="#projects">Personal projects</a></li>
-						<li><a href="#lang-and-tools">Languages and tools</a></li>
-						<li><a href="#contacts">Contact</a></li>
-					</ul>
-				</nav>
-				<footer>
-					<ul class="icons">
-						<li><a href="http://github.com/samweru" class="icon fa-github"><span class="label">Github</span></a></li>
-						<li><a href="http://twitter.com/samiweru" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="mailto:samweru@gmail.com" class="icon fa-envelope"><span class="label">Email</span></a></li>
-					</ul>
-				</footer>
-			</section>
+              event.preventDefault();
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+              var response = grecaptcha.getResponse();
+          if(response.length == 0){
 
-				<!-- Main -->
-					<div id="main">
+            //reCaptcha not verified
+            alert("Please verify you are humann!"); 
+            evt.preventDefault();
+            return false;
+          }
+          else{
+            // var status = document.getElementById("my-form-status");
+            var data = new FormData(event.target);
 
-						<!-- One -->
-							<section id="intro">
-								<div class="container">
-									<header class="major">
-										<h2>Coding is awesome!</h2>
-										<p style="text-align:bottom;"><img style="float: left; margin: 0px 15px 15px 0px;" src="images/martin-fowler.jpg" width=150 height=150 alt=""/>
-										<i>A fool can write code a machine understands. A good programmer writes code a human can understand - <a target="_blank" href="http://martinfowler.com/">Martin Fowler</a></i></p>
-									</header></br>
-									<p>Am a software developer pursuing challenging and fulfilling career in information technology founded on efficiency,  delivery of quality service, ethical practice and maintenance of high professional standards.</p>
-								</div>
-							</section>
+            fetch(event.target.action,{
 
-						<!-- Three -->
-							<section id="projects">
-								<div class="container">
-									<h3>A few personal projects</h3>
-									<div class="features">
-										<article>
-											<div class="inner">
-												<h4>PHP</h4>
-												<ul>
-													<li><a target="_blank" href="https://github.com/samweru-zz/blockly#blockly"><span class="jquery">Blockly</span></a> - How blockchain works!</li>
-												</ul>
-												<br>
-											</div>
-											<div class="inner">
-												<h4>Javascript</h4>
-												<ul>
-													<li><a target="_blank" href="https://github.com/samweru-zz/jquery-routr#jquery-routr"><span class="jquery">jQuery</span> <span class="routr">routr</span></a> - Light Weight Router</li>
-													<li><a target="_blank" href="https://github.com/samweru-zz/simplr-grid#simplr-grid"><span class="jquery">jQuery</span> <span class="routr">Simplr Grid</span></a> - Data Grid</li>
-												</ul>
-											</div>
-										</article>
-										See my github <a target="_blank" href="https://github.com/samweru"><b>profile</b></a> for more.
+              method: form.method,
+              body: data,
+              headers: {
 
-									</div>
-								</div>
-							</section>
+                  'Accept': 'application/json'
+              }
+            })
+            .then(response => {
+              // status.innerHTML = "Thanks for your submission!";
+              console.log("Thanks for your submission!")
+              form.reset()
+            })
+            .catch(error => {
+              // status.innerHTML = "Oops! There was a problem submitting your form"
+              alert("Oops! There was a problem submitting your form")
+            });
+          }
+          }
 
-						<!-- Two -->
-							<section id="lang-and-tools">
-								<div class="container">
-									<h3>Programming languages, OSs, DBs and other tools I use</h3>
-									<ul>
-										<li>PHP (Symfony, Doctrine, Laravel)</li>
-										<li>Python (Appengine, Django, Bottle)</li>
-										<li>Java (Spring, Hibernate)</li>
-										<li>NodeJS (ExpressJS)</li>
-										<li>Ruby (Rails, Sinatra)</li>
-										<li>Linux (RedHat, Ubuntu, CentOS)</li>
-										<li>Devops Tools (Ansible, LXC, GIT, SVN, Composer, MVN)</li>
-										<li>Databases (MongoDB, XMLDBs/XQuery, PostgreSQL, MySQL, MSSQL)</li>
-										<li>Javascript (AngularJS, jQuery)<a target="_blank" href="/project/payroll-ui-ng/" style="color:#1a0dab;"> [payroll-ui-ng] </a></li>
-									</ul>
-								</div>
-							</section>
-
-						<!-- Four -->
-							<section id="contacts">
-								<div class="container">
-									<h3>Contact Me</h3>
-									<form id="my-form" 
-											action="https://formspree.io/f/xlezpkdg" 
-											method="POST">
-										<div class="row uniform">
-											<div class="6u 12u(xsmall)"><input type="text" name="name" id="name" placeholder="Name" required/></div>
-											<div class="6u 12u(xsmall)"><input type="email" name="email" id="email" placeholder="Email" required/></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u"><input type="text" name="subject" id="subject" placeholder="Subject" required/></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u"><textarea name="message" id="message" placeholder="Message" rows="6" required></textarea></div>
-										</div>
-										<!-- <div class="alert">The brrown dirty fox jusmped over the dog!</div> -->
-										<div class="row uniform">
-											<div class="12u">
-												<ul class="actions">
-													<div class="g-recaptcha" 
-														data-sitekey="6Lf4LjUcAAAAAAhdUbZhuZ-D5UJLRL4X4cjcFys1"></div> <!-- replace with your recaptcha SITE key not secret key -->
-												</ul>
-											</div>
-										</div>
-										<div class="row uniform">
-											<div class="12u">
-												<ul class="actions">
-													<li><input type="submit" class="special" value="Send Message" /></li>
-													<li><input type="reset" value="Reset Form" /></li>
-												</ul>
-											</div>
-										</div>
-      									<!-- <br/> -->
-									</form>
-								</div>
-							</section>
-					</div>
-
-				<!-- Footer -->
-					<section id="footer">
-						<div class="container">
-							<ul class="copyright">
-								<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
-					</section>
-
-			</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollzer.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
-			<script>
-			    var form = document.getElementById("my-form");
-			    
-			    async function handleSubmit(event){
-
-			      	event.preventDefault();
-
-			      	var response = grecaptcha.getResponse();
-					if(response.length == 0){
-
-						//reCaptcha not verified
-						alert("Please verify you are humann!"); 
-						evt.preventDefault();
-						return false;
-					}
-					else{
-						// var status = document.getElementById("my-form-status");
-						var data = new FormData(event.target);
-
-						fetch(event.target.action,{
-
-							method: form.method,
-							body: data,
-							headers: {
-
-							    'Accept': 'application/json'
-							}
-						})
-						.then(response => {
-							// status.innerHTML = "Thanks for your submission!";
-							console.log("Thanks for your submission!")
-							form.reset()
-						})
-						.catch(error => {
-							// status.innerHTML = "Oops! There was a problem submitting your form"
-							alert("Oops! There was a problem submitting your form")
-						});
-					}
-			    }
-
-			    form.addEventListener("submit", handleSubmit)
-			</script>
-	</body>
-</html>
+          form.addEventListener("submit", handleSubmit)</script></body></html>
