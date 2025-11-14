@@ -6,7 +6,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog1.md",
-	"img":"/images/stock-photo1.jpeg",
+	"img":"/project/callstreet/images/stock-photo1.jpeg",
 	"status":"Featured",
 	"tags":["stocks"]
 },
@@ -18,7 +18,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog2.md",
-	"img":"/images/cbk-logo.png",
+	"img":"/project/callstreet/images/cbk-logo.png",
 	"status":"Published",
 	"tags":["economy","stocks"]
 },
@@ -30,7 +30,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog3.md",
-	"img":"/images/cbk-building.png",
+	"img":"/project/callstreet/images/cbk-building.png",
 	"status":"Closed",
 	"tags":["economy"]
 },
@@ -42,7 +42,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog4.md",
-	"img":"/images/jpm.png",
+	"img":"/project/callstreet/images/jpm.png",
 	"status":"Closed",
 	"tags":["economy"]
 },
@@ -54,7 +54,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog5.md",
-	"img":"/images/absa-barclays.jpg",
+	"img":"/project/callstreet/images/absa-barclays.jpg",
 	"status":"Closed",
 	"tags":["banking"]
 },
@@ -66,7 +66,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog6.md",
-	"img":"/images/bankcovid2.jpg",
+	"img":"/project/callstreet/images/bankcovid2.jpg",
 	"status":"Withdrawn",
 	"tags":["Technology"]
 },
@@ -78,7 +78,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog7.md",
-	"img":"/images/people1.jpg",
+	"img":"/project/callstreet/images/people1.jpg",
 	"status":"Closed",
 	"tags":["economy"]
 },
@@ -90,7 +90,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog8.md",
-	"img":"/images/sgr3.jpg",
+	"img":"/project/callstreet/images/sgr3.jpg",
 	"status":"Featured",
 	"tags":["Infrastructure"]
 },
@@ -102,7 +102,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog9.md",
-	"img":"/images/safaricom1.jpg",
+	"img":"/project/callstreet/images/safaricom1.jpg",
 	"status":"Featured",
 	"tags":["insurance"]
 },
@@ -114,7 +114,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog10.md",
-	"img":"/images/plane1.jpg",
+	"img":"/project/callstreet/images/plane1.jpg",
 	"status":"Published",
 	"tags":["stocks"]
 },
@@ -126,7 +126,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog11.md",
-	"img":"/images/graph1.jpg",
+	"img":"/project/callstreet/images/graph1.jpg",
 	"status":"Published",
 	"tags":["insurance"]
 },
@@ -138,7 +138,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog12.md",
-	"img":"/images/coins1.jpg",
+	"img":"/project/callstreet/images/coins1.jpg",
 	"status":"Published",
 	"tags":["banking"]
 },
@@ -150,7 +150,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog13.md",
-	"img":"/images/beer.png",
+	"img":"/project/callstreet/images/beer.png",
 	"status":"Published",
 	"tags":["stocks"]
 },
@@ -162,7 +162,7 @@
 	"likes":0,
 	"views":0,
 	"link":"/docs/blogs/blog14.md",
-	"img":"/images/ukraine.jpeg",
+	"img":"/project/callstreet/images/ukraine.jpeg",
 	"status":"Published",
 	"tags":["geopolitics"]
 }]
